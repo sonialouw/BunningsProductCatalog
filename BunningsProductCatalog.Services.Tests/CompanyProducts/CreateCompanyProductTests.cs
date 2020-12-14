@@ -114,7 +114,6 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProducts
 				result.Errors.Where(m => m.Field == "CompanyCode").Select(e => e.GetType()).ToList());
 		}
 
-
 		[Trait("Category", "unit")]
 		[Fact]
 		public void DuplicateProductSkuForSameCompanyFound()
@@ -180,5 +179,55 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProducts
 			Assert.True(result.Success);
 			UoW.Verify(m => m.Save(), Times.AtLeastOnce);
 		}
+
+		[Trait("Category", "unit")]
+		[Fact]
+		public void ValidateCompanyProductExist()
+		{
+			// Act
+			var result = Subject.ValidateCompanyProductExist(TestData.ProductSkuCompanyCodeA, TestData.CompanyCodeA);
+
+			// Assert
+			Assert.Empty(result);
+		}
+
+		[Trait("Category", "unit")]
+		[Fact]
+		public void ValidateCompanyProductDoesNotExist()
+		{
+			UoW.Setup(m => m.CompanyProducts.GetAll()).Returns(new List<CompanyProduct> { }.AsQueryable());
+
+			// Act
+			var result = Subject.ValidateCompanyProductExist(TestData.ProductSkuCompanyCodeA, TestData.CompanyCodeA);
+
+			// Assert
+			Assert.Contains(typeof(ProductSkuNotFoundError),
+				result.Where(m => m.Field == "ProductSku").Select(e => e.GetType()).ToList());
+		}
+
+		[Trait("Category", "unit")]
+		[Fact]
+		public void GetCompanyProductFound()
+		{
+			// Act
+			var result = Subject.GetCompanyProduct(TestData.ProductSkuCompanyCodeA, TestData.CompanyCodeA);
+
+			// Assert
+			Assert.NotNull(result);
+		}
+
+		[Trait("Category", "unit")]
+		[Fact]
+		public void GetCompanyProductNotFound()
+		{
+			UoW.Setup(m => m.CompanyProducts.GetAll()).Returns(new List<CompanyProduct> { }.AsQueryable());
+
+			// Act
+			var result = Subject.GetCompanyProduct(TestData.ProductSkuCompanyCodeA, TestData.CompanyCodeA);
+
+			// Assert
+			Assert.Null(result);
+		}
+
 	}
 }

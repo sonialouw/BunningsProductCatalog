@@ -117,7 +117,7 @@ namespace BunningsProductCatalog.Services.Suppliers
 		public Supplier GetSupplier(string supplierCode, string companyCode)
 		{
 			return UoW.Suppliers.GetAll().FirstOrDefault(i => i.Company.CompanyCode.Trim().ToUpper() == companyCode.Trim().ToUpper()
-			&& i.SupplierCode.Trim().ToUpper() == supplierCode.Trim().ToUpper() );
+			  && i.SupplierCode.Trim().ToUpper() == supplierCode.Trim().ToUpper() );
 		}
 
 		public IEnumerable<Error> ValidateSupplierExist(string supplierCode, string companyCode)
@@ -143,6 +143,8 @@ namespace BunningsProductCatalog.Services.Suppliers
 
 			return newErrors;
 		}
+
+
 
 	}
 }

@@ -179,5 +179,55 @@ namespace BunningsProductCatalog.Services.Tests.Suppliers
 			UoW.Verify(m => m.Save(), Times.AtLeastOnce);
 		}
 
+
+		[Trait("Category", "unit")]
+		[Fact]
+		public void ValidateSupplierExist()
+		{
+			// Act
+			var result = Subject.ValidateSupplierExist(TestData.ExistingSupplierCode, TestData.CompanyCodeA);
+
+			// Assert
+			Assert.Empty(result);
+		}
+
+		[Trait("Category", "unit")]
+		[Fact]
+		public void ValidateSupplierDoesNotExist()
+		{
+			UoW.Setup(m => m.Suppliers.GetAll()).Returns(new List<Supplier>{}.AsQueryable());
+
+			// Act
+			var result = Subject.ValidateSupplierExist(TestData.ExistingSupplierCode, TestData.CompanyCodeA);
+
+			// Assert
+			Assert.Contains(typeof(SupplierCodeNotFoundError),
+				result.Where(m => m.Field == "SupplierCode").Select(e => e.GetType()).ToList());
+		}
+
+		[Trait("Category", "unit")]
+		[Fact]
+		public void GetSupplierFound()
+		{
+			// Act
+			var result = Subject.GetSupplier(TestData.ExistingSupplierCode, TestData.CompanyCodeA);
+
+			// Assert
+			Assert.NotNull(result);
+		}
+
+		[Trait("Category", "unit")]
+		[Fact]
+		public void GetSupplierNotFound()
+		{
+			UoW.Setup(m => m.Suppliers.GetAll()).Returns(new List<Supplier> { }.AsQueryable());
+
+			// Act
+			var result = Subject.GetSupplier(TestData.ExistingSupplierCode, TestData.CompanyCodeA);
+
+			// Assert
+			Assert.Null(result);
+		}
+
 	}
 }

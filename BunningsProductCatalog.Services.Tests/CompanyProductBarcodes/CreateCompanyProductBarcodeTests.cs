@@ -174,6 +174,5 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProductBarcodes
 			Assert.True(result.Success);
 			UoW.Verify(m => m.Save(), Times.AtLeastOnce);
 		}
-
 	}
 }
