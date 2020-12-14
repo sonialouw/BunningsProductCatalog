@@ -1,0 +1,11 @@
+﻿using BunningsProductCatalog.Services.Data.CompanyProductBarcodes.Requests;
+using BunningsProductCatalog.Services.Data.CompanyProductBarcodes.Results;
+
+namespace BunningsProductCatalog.Services.CompanyProductBarcodes
+{
+	public interface ICompanyProductBarcodeService
+	{
+		ImportCompanyProductBarcodeResult ImportCompanyProductBarcodesFromFileStream(ImportCompanyProductBarcodeRequest request);
+		CreateCompanyProductBarcodeResult CreateCompanyProductBarcode(CreateCompanyProductBarcodeRequest request);
+	}
+}

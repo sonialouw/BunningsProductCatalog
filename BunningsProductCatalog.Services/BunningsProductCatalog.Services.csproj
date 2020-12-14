@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Suppliers\ISupplierService.cs~RFac560fa.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CsvHelper" Version="18.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BunningsProductCatalog.Domain\BunningsProductCatalog.Domain.csproj" />
+    <ProjectReference Include="..\BunningsProductCatalog.Repository\BunningsProductCatalog.Repository.csproj" />
+    <ProjectReference Include="..\BunningsProductCatalog.Services.Data\BunningsProductCatalog.Services.Data.csproj" />
+  </ItemGroup>
+
+</Project>

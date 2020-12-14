@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<ProjectGuid>{C3ECC088-76F0-4E35-A08C-02FD95AA5FAB}</ProjectGuid>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Azure.WebJobs" Version="3.0.16" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions" Version="3.0.6" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Logging.ApplicationInsights" Version="3.0.14" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.6" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.6" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.6" />
+		<PackageReference Include="Microsoft.VisualStudio.SlowCheetah" Version="3.2.26">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\BunningsProductCatalog.Domain\BunningsProductCatalog.Domain.csproj" />
+	  <ProjectReference Include="..\BunningsProductCatalog.Repository\BunningsProductCatalog.Repository.csproj" />
+	  <ProjectReference Include="..\BunningsProductCatalog.Services.Data\BunningsProductCatalog.Services.Data.csproj" />
+	  <ProjectReference Include="..\BunningsProductCatalog.Services\BunningsProductCatalog.Services.csproj" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+		<None Update="appsettings.Development.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="appsettings.json">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<TransformOnBuild>true</TransformOnBuild>
+		</None>
+		<None Update="appsettings.Release.json">
+			<IsTransformFile>true</IsTransformFile>
+			<DependentUpon>appsettings.json</DependentUpon>
+		</None>
+		<None Update="settings.job">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+	
+</Project>
