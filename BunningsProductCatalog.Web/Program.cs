@@ -1,11 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
+using Azure.Identity;
 
 namespace BunningsProductCatalog.Web
 {
@@ -23,45 +21,41 @@ namespace BunningsProductCatalog.Web
 				{
 					webBuilder.UseStartup<Startup>();
 
+					// disable app insights for now
+					//webBuilder.ConfigureLogging((context, b) =>
+					//{
+					//	var instrumentationKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
+					//	if (!string.IsNullOrEmpty(instrumentationKey))
+					//	{
+					//		b.AddApplicationInsights(instrumentationKey);
+					//	}
 
-					webBuilder.ConfigureLogging((context, b) =>
-					{
+					//	b.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>(typeof(Program).FullName, LogLevel.Trace);
+					//	b.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>(typeof(Startup).FullName, LogLevel.Trace);
+					//	b.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
+					//	b.AddFilter("Microsoft.EntityFrameworkCore.Infrastructure", LogLevel.Warning);
 
-
-					
-						string instrumentationKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
-						if (!string.IsNullOrEmpty(instrumentationKey))
-						{
-							b.AddApplicationInsights(instrumentationKey);
-						}
-
-						// Adding the filter below to ensure logs of all severity from Program.cs
-						// is sent to ApplicationInsights.
-						b.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>
-														 (typeof(Program).FullName, LogLevel.Trace);
-
-						// Adding the filter below to ensure logs of all severity from Startup.cs
-						// is sent to ApplicationInsights.
-						b.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>
-														 (typeof(Startup).FullName, LogLevel.Trace);
-
-						b.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
-						b.AddFilter("Microsoft.EntityFrameworkCore.Infrastructure", LogLevel.Warning);
-					});
+					//});
 
 					webBuilder.ConfigureAppConfiguration((hostingContext, config) =>
 					{
+
+						// app settings
 						var env = hostingContext.HostingEnvironment;
 						config.AddJsonFile("appsettings.json", true, true)
 							.AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
 							.AddJsonFile($"appsettings.{Environment.MachineName}.json", true, true);
 
+						// disable key vault as it is not needed here
 						//if (!hostingContext.HostingEnvironment.IsDevelopment())
 						//{
 						//	var builtConfig = config.Build();
 						//	config.AddAzureKeyVault(new Uri(builtConfig["KeyVault:BaseUrl"]), new DefaultAzureCredential());
 						//}
+
 					});
+
+
 				});
 		}
 	}
