@@ -44,6 +44,8 @@ namespace BunningsProductCatalog.WebJobs.Common
 			{
 				config.AddConsole();
 			}
+			config.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
+			config.AddFilter("Microsoft.EntityFrameworkCore.Infrastructure", LogLevel.Warning);
 
 			// disable app insights for now
 			//string instrumentationKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
@@ -61,9 +63,9 @@ namespace BunningsProductCatalog.WebJobs.Common
 			//	});
 			//}
 
-			//config.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>
-			//	(applicationInsightsCategory, LogLevel.Trace);
-		}
+			//config.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>(applicationInsightsCategory, LogLevel.Trace);
+
+			}
 
 
 		public static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
