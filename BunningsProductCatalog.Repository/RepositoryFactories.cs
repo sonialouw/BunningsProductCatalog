@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BunningsProductCatalog.Domain.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace BunningsProductCatalog.Repository
@@ -36,7 +37,10 @@ namespace BunningsProductCatalog.Repository
 		{
 			return new Dictionary<Type, Func<DbContext, object>>
 			{
-				
+				{typeof(ISupplierRepository), dbContext => new SupplierRepository(dbContext)},
+				{typeof(ICompanyProductBarcodeRepository), dbContext => new CompanyProductBarcodeRepository(dbContext)},
+				{typeof(ICompanyProductRepository), dbContext => new CompanyProductRepository(dbContext)},
+				{typeof(ICompanyRepository), dbContext => new CompanyRepository(dbContext)},
 			};
 		}
 

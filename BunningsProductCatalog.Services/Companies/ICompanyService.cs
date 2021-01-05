@@ -6,7 +6,6 @@ namespace BunningsProductCatalog.Services.Companies
 {
 	public interface ICompanyService
 	{
-		Company GetCompany(string companyCode);
 		IEnumerable<Error> ValidateCompanyExist(string companyCode);
 	}
 }

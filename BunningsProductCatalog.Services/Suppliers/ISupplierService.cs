@@ -10,7 +10,6 @@ namespace BunningsProductCatalog.Services.Suppliers
 	{
 		ImportSupplierResult ImportSuppliersFromFileStream(ImportSupplierRequest request);
 		CreateSupplierResult CreateSupplier(CreateSupplierRequest request);
-		Supplier GetSupplier(string supplierCode, string companyCode);
 		IEnumerable<Error> ValidateSupplierExist(string supplierCode, string companyCode);
 
 	}

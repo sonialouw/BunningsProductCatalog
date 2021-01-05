@@ -46,7 +46,7 @@ namespace BunningsProductCatalog.Services.Suppliers
 				var records = ImportSupplierCsvService.GetRecords(request.FileStream, new ImportSupplierDtoClassMap());
 				records.ForEach(supplier =>
 				{
-					var existingSupplier = GetSupplier(supplier.SupplierCode, request.CompanyCode);
+					var existingSupplier = UoW.Suppliers.GetBySupplierCodeAndCompanyCode(supplier.SupplierCode, request.CompanyCode);
 					if (existingSupplier == null)
 					{
 						var createSupplierResult = CreateSupplier(new CreateSupplierRequest() { SupplierName = supplier.SupplierName, SupplierCode = supplier.SupplierCode, CompanyCode = request.CompanyCode });
@@ -89,7 +89,7 @@ namespace BunningsProductCatalog.Services.Suppliers
 					return result;
 				}
 
-				var company = CompanyService.GetCompany(request.CompanyCode);
+				var company = UoW.Companies.GetByCompanyCode(request.CompanyCode);
 				var newSupplier = new Supplier
 				{
 					SupplierCode = request.SupplierCode.ToUpper().Trim(),
@@ -114,17 +114,12 @@ namespace BunningsProductCatalog.Services.Suppliers
 			return result;
 		}
 
-		public Supplier GetSupplier(string supplierCode, string companyCode)
-		{
-			return UoW.Suppliers.GetAll().FirstOrDefault(i => i.Company.CompanyCode.Trim().ToUpper() == companyCode.Trim().ToUpper()
-			  && i.SupplierCode.Trim().ToUpper() == supplierCode.Trim().ToUpper() );
-		}
 
 		public IEnumerable<Error> ValidateSupplierExist(string supplierCode, string companyCode)
 		{
 			var newErrors = new List<Error>();
 
-			if (!string.IsNullOrEmpty(companyCode) && !string.IsNullOrEmpty(companyCode) && GetSupplier(supplierCode, companyCode) == null)
+			if (!string.IsNullOrEmpty(companyCode) && !string.IsNullOrEmpty(companyCode) && UoW.Suppliers.GetBySupplierCodeAndCompanyCode(supplierCode, companyCode) == null)
 			{
 				newErrors.Add(new SupplierCodeNotFoundError(supplierCode, companyCode));
 			}
@@ -135,8 +130,9 @@ namespace BunningsProductCatalog.Services.Suppliers
 		private IEnumerable<Error> ValidateDuplicateSupplier(string supplierCode, string companyCode)
 		{
 			var newErrors = new List<Error>();
+			var supplier = UoW.Suppliers.GetBySupplierCodeAndCompanyCode(supplierCode, companyCode);
 
-			if (!string.IsNullOrEmpty(companyCode) && !string.IsNullOrEmpty(supplierCode) && GetSupplier(supplierCode, companyCode) != null)
+			if (!string.IsNullOrEmpty(companyCode) && !string.IsNullOrEmpty(supplierCode) && UoW.Suppliers.GetBySupplierCodeAndCompanyCode(supplierCode, companyCode) != null)
 			{
 				newErrors.Add(new DuplicateSupplierCodeFoundError(supplierCode, companyCode));
 			}

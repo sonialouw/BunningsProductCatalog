@@ -46,8 +46,6 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProductBarcodes
 				CompanyName = "Company A"
 			};
 
-			CompanyService.Setup(m => m.GetCompany(TestData.CompanyCodeA)).Returns(companyA);
-			CompanyService.Setup(m => m.GetCompany(TestData.CompanyCodeB)).Returns(companyB);
 			CompanyService.Setup(m => m.ValidateCompanyExist(It.IsAny<string>())).Returns(new List<Error>());
 
 			var supplier = new Supplier
@@ -57,7 +55,6 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProductBarcodes
 				Company = companyA
 			};
 
-			SupplierService.Setup(m => m.GetSupplier(TestData.SupplierCode, TestData.CompanyCodeA)).Returns(supplier);
 			SupplierService.Setup(m => m.ValidateSupplierExist(TestData.SupplierCode, TestData.CompanyCodeA)).Returns(new List<Error>());
 
 			var companyProductProductCompanyA = new CompanyProduct
@@ -74,10 +71,7 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProductBarcodes
 				Company = companyB
 			};
 
-			CompanyProductService.Setup(m => m.GetCompanyProduct(TestData.ProductSkuCompanyCodeA, TestData.CompanyCodeA)).Returns(companyProductProductCompanyA);
 			CompanyProductService.Setup(m => m.ValidateCompanyProductExist(TestData.ProductSkuCompanyCodeA, TestData.CompanyCodeA)).Returns(new List<Error>());
-
-			CompanyProductService.Setup(m => m.GetCompanyProduct(TestData.ProductSkuCompanyCodeB, TestData.CompanyCodeB)).Returns(companyProductProductCompanyB);
 			CompanyProductService.Setup(m => m.ValidateCompanyProductExist(TestData.ProductSkuCompanyCodeB, TestData.CompanyCodeB)).Returns(new List<Error>());
 
 			var companyProductBarcode1 = new CompanyProductBarcode
@@ -92,6 +86,11 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProductBarcodes
 				companyProductBarcode1
 			}.AsQueryable());
 
+			UoW.Setup(m => m.Suppliers.GetBySupplierCodeAndCompanyCode(TestData.SupplierCode, TestData.CompanyCodeA)).Returns(supplier);
+			UoW.Setup(m => m.CompanyProducts.GetBySkuAndCompanyCode(TestData.ProductSkuCompanyCodeA, TestData.CompanyCodeA)).Returns(companyProductProductCompanyA);
+			UoW.Setup(m => m.CompanyProducts.GetBySkuAndCompanyCode(TestData.ProductSkuCompanyCodeB, TestData.CompanyCodeB)).Returns(companyProductProductCompanyB);
+			UoW.Setup(m => m.Companies.GetByCompanyCode(TestData.CompanyCodeA)).Returns(companyA);
+			UoW.Setup(m => m.Companies.GetByCompanyCode(TestData.CompanyCodeB)).Returns(companyB);
 
 		}
 

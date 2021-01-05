@@ -34,7 +34,7 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProducts
 				},
 			});
 
-			CompanyService.Setup(m => m.GetCompany(It.IsAny<string>())).Returns((Company)null);
+			UoW.Setup(m => m.Companies.GetByCompanyCode(It.IsAny<string>())).Returns((Company)null);
 
 			using var writer = new StreamWriter(new MemoryStream());
 			var result = Subject.ImportCompanyProductsFromFileStream(new ImportCompanyProductRequest() { FileStream = writer.BaseStream });
@@ -65,7 +65,7 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProducts
 				},
 				});
 
-			CompanyService.Setup(m => m.GetCompany(It.IsAny<string>())).Returns((Company)null);
+			UoW.Setup(m => m.Companies.GetByCompanyCode(It.IsAny<string>())).Returns((Company)null);
 			CompanyService.Setup(m => m.ValidateCompanyExist(It.IsAny<string>())).Returns(new List<Error>() { new CompanyCodeNotFoundError(companyCode) });
 
 			using var writer = new StreamWriter(new MemoryStream());

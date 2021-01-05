@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using System;
-using Azure.Identity;
 
 namespace BunningsProductCatalog.Web
 {
@@ -21,7 +19,7 @@ namespace BunningsProductCatalog.Web
 				{
 					webBuilder.UseStartup<Startup>();
 
-					// disable app insights for now
+					// disable app insights 
 					//webBuilder.ConfigureLogging((context, b) =>
 					//{
 					//	var instrumentationKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
@@ -34,19 +32,16 @@ namespace BunningsProductCatalog.Web
 					//	b.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>(typeof(Startup).FullName, LogLevel.Trace);
 					//	b.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
 					//	b.AddFilter("Microsoft.EntityFrameworkCore.Infrastructure", LogLevel.Warning);
-
 					//});
 
 					webBuilder.ConfigureAppConfiguration((hostingContext, config) =>
 					{
-
-						// app settings
 						var env = hostingContext.HostingEnvironment;
 						config.AddJsonFile("appsettings.json", true, true)
 							.AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, true)
 							.AddJsonFile($"appsettings.{Environment.MachineName}.json", true, true);
 
-						// disable key vault as it is not needed here
+						// disable key vault
 						//if (!hostingContext.HostingEnvironment.IsDevelopment())
 						//{
 						//	var builtConfig = config.Build();

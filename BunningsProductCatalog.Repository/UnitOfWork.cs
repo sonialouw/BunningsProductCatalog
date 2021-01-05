@@ -18,10 +18,10 @@ namespace BunningsProductCatalog.Repository
 
 		private BunningsProductCatalogContext Context { get; }
 
-		public IRepository<Company> Companies => GetStandardRepo<Company>();
-		public IRepository<Supplier> Suppliers => GetStandardRepo<Supplier>();
-		public IRepository<CompanyProductBarcode> CompanyProductBarcodes => GetStandardRepo<CompanyProductBarcode>();
-		public IRepository<CompanyProduct> CompanyProducts => GetStandardRepo<CompanyProduct>();
+		public ICompanyRepository Companies => GetRepo<ICompanyRepository>();
+		public ISupplierRepository Suppliers => GetRepo<ISupplierRepository>();
+		public ICompanyProductRepository CompanyProducts => GetRepo<ICompanyProductRepository>();
+		public ICompanyProductBarcodeRepository CompanyProductBarcodes => GetRepo<ICompanyProductBarcodeRepository>();
 
 		public void Save()
 		{

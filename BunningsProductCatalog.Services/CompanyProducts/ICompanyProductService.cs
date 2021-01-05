@@ -10,7 +10,6 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 	{
 		ImportCompanyProductResult ImportCompanyProductsFromFileStream(ImportCompanyProductRequest request);
 		CreateCompanyProductResult CreateCompanyProduct(CreateCompanyProductRequest request);
-		CompanyProduct GetCompanyProduct(string productSku, string companyCode);
 		IEnumerable<Error> ValidateCompanyProductExist(string productSku, string companyCode);
 		DeleteCompanyProductResult DeleteCompanyProduct(DeleteCompanyProductRequest request);
 	}

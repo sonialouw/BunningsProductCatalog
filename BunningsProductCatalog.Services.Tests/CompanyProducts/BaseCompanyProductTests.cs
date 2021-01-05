@@ -40,8 +40,8 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProducts
 				CompanyName = "Company A"
 			};
 
-			CompanyService.Setup(m => m.GetCompany(TestData.CompanyCodeA)).Returns(companyA);
-			CompanyService.Setup(m => m.GetCompany(TestData.CompanyCodeB)).Returns(companyB);
+			UoW.Setup(m => m.Companies.GetByCompanyCode(TestData.CompanyCodeA)).Returns(companyA);
+			UoW.Setup(m => m.Companies.GetByCompanyCode(TestData.CompanyCodeB)).Returns(companyB);
 			CompanyService.Setup(m => m.ValidateCompanyExist(It.IsAny<string>())).Returns(new List<Error>());
 
 			var supplier = new Supplier
@@ -76,6 +76,8 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProducts
 				companyProductCompanyB
 			}.AsQueryable());
 
+			UoW.Setup(m => m.CompanyProducts.GetBySkuAndCompanyCode(TestData.ProductSkuCompanyCodeA, TestData.CompanyCodeA)).Returns(companyProductCompanyA);
+			UoW.Setup(m => m.CompanyProducts.GetBySkuAndCompanyCode(TestData.ProductSkuCompanyCodeB, TestData.CompanyCodeB)).Returns(companyProductCompanyB);
 		}
 
 

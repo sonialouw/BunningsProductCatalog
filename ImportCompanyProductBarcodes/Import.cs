@@ -4,6 +4,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using System.Linq;
 
 namespace ImportCompanyProductBarcodes
 {
@@ -26,13 +27,17 @@ namespace ImportCompanyProductBarcodes
 			Logger.LogInformation($"Web job started.");
 
 			var inputFilePath = Config["InputFilePath"];
-		
+
 			var files = Directory.GetFiles(inputFilePath, "barcodes*.csv");
 			foreach (var file in files)
 			{
 				var companyCode = file.Replace("barcodes", "").Replace(inputFilePath, "").Replace(".csv", "");
 				using FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read);
-				CompanyProductBarcodeService.ImportCompanyProductBarcodesFromFileStream(new ImportCompanyProductBarcodeRequest() { FileStream = fs, CompanyCode = companyCode });
+				var result = CompanyProductBarcodeService.ImportCompanyProductBarcodesFromFileStream(new ImportCompanyProductBarcodeRequest() { FileStream = fs, CompanyCode = companyCode });
+				if (!result.Success)
+				{
+					Logger.LogError($"Import failed {string.Join(",", result.Errors?.Select(i => i.Message))}.");
+				}
 			}
 			Logger.LogInformation($"Web job completed.");
 		}

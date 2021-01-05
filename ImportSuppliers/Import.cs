@@ -4,6 +4,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using System.Linq;
 using BunningsProductCatalog.Domain.Repository;
 
 namespace ImportSuppliers
@@ -33,7 +34,11 @@ namespace ImportSuppliers
 			{
 				var companyCode = file.Replace("suppliers", "").Replace(inputFilePath, "").Replace(".csv", "");
 				using FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read);
-				SupplierService.ImportSuppliersFromFileStream(new ImportSupplierRequest() { FileStream = fs, CompanyCode = companyCode });
+				var result = SupplierService.ImportSuppliersFromFileStream(new ImportSupplierRequest() { FileStream = fs, CompanyCode = companyCode });
+				if (!result.Success)
+				{
+					Logger.LogError($"Import failed {string.Join(",", result.Errors?.Select(i => i.Message))}.");
+				}
 			}
 
 			Logger.LogInformation($"Web job completed.");

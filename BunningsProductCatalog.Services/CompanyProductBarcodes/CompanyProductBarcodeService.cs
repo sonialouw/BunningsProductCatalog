@@ -97,8 +97,8 @@ namespace BunningsProductCatalog.Services.CompanyProductBarcodes
 					return result;
 				}
 
-				var supplier = SupplierService.GetSupplier(request.SupplierCode, request.CompanyCode);
-				var companyProduct = CompanyProductService.GetCompanyProduct(request.ProductSku, request.CompanyCode);
+				var supplier = UoW.Suppliers.GetBySupplierCodeAndCompanyCode(request.SupplierCode, request.CompanyCode);
+				var companyProduct = UoW.CompanyProducts.GetBySkuAndCompanyCode(request.ProductSku, request.CompanyCode);
 
 				var newCompanyProductBarcode = new CompanyProductBarcode
 				{

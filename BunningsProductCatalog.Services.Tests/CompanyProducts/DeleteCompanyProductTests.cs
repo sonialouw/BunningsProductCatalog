@@ -36,8 +36,8 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProducts
 			var request = TestData.GetDeleteCompanyProductRequest();
 			request.CompanyCode = null;
 
-			CompanyService.Setup(m => m.GetCompany(It.IsAny<string>())).Returns((Company)null);
-			
+			UoW.Setup(m => m.Companies.GetByCompanyCode(It.IsAny<string>())).Returns((Company)null);
+
 			// Act
 			var result = Subject.DeleteCompanyProduct(request);
 

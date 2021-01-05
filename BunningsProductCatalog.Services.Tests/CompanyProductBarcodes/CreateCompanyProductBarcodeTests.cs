@@ -38,7 +38,7 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProductBarcodes
 			var request = TestData.GetCreateCompanyProductBarcodeRequest();
 			request.ProductSku = "ABC";
 
-			CompanyProductService.Setup(m => m.GetCompanyProduct(request.ProductSku, TestData.CompanyCodeA)).Returns((CompanyProduct)null);
+			UoW.Setup(m => m.CompanyProducts.GetBySkuAndCompanyCode(request.ProductSku, TestData.CompanyCodeA)).Returns((CompanyProduct)null);
 			CompanyProductService.Setup(m => m.ValidateCompanyProductExist(request.ProductSku, TestData.CompanyCodeA)).Returns(new List<Error>() { new ProductSkuNotFoundError(request.ProductSku, request.CompanyCode) });
 
 			// Act
@@ -59,7 +59,7 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProductBarcodes
 			var request = TestData.GetCreateCompanyProductBarcodeRequest();
 			request.SupplierCode = null;
 
-			SupplierService.Setup(m => m.GetSupplier(request.SupplierCode, request.CompanyCode)).Returns((Supplier)null);
+			UoW.Setup(m => m.Suppliers.GetBySupplierCodeAndCompanyCode(TestData.SupplierCode, TestData.CompanyCodeA)).Returns((Supplier)null);
 			SupplierService.Setup(m => m.ValidateSupplierExist(request.SupplierCode, request.CompanyCode)).Returns(new List<Error>() { new RequiredFieldMissingError("SupplierCode", "Supplier code cannot be empty") });
 
 			// Act
@@ -78,7 +78,7 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProductBarcodes
 			var request = TestData.GetCreateCompanyProductBarcodeRequest();
 			request.SupplierCode = "ABC";
 
-			SupplierService.Setup(m => m.GetSupplier(request.SupplierCode, request.CompanyCode)).Returns((Supplier)null);
+			UoW.Setup(m => m.Suppliers.GetBySupplierCodeAndCompanyCode(TestData.SupplierCode, TestData.CompanyCodeA)).Returns((Supplier)null);
 			SupplierService.Setup(m => m.ValidateSupplierExist(request.SupplierCode, request.CompanyCode)).Returns(new List<Error>() { new SupplierCodeNotFoundError(request.SupplierCode, request.CompanyCode) });
 
 			// Act
@@ -114,7 +114,7 @@ namespace BunningsProductCatalog.Services.Tests.CompanyProductBarcodes
 			var request = TestData.GetCreateCompanyProductBarcodeRequest();
 			request.CompanyCode = "C";
 
-			CompanyService.Setup(m => m.GetCompany(It.IsAny<string>())).Returns((Company)null);
+			UoW.Setup(m => m.Companies.GetByCompanyCode(It.IsAny<string>())).Returns((Company)null);
 			CompanyService.Setup(m => m.ValidateCompanyExist(It.IsAny<string>())).Returns(new List<Error>() { new CompanyCodeNotFoundError(request.CompanyCode) });
 
 			// Act

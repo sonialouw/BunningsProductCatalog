@@ -43,6 +43,8 @@ namespace BunningsProductCatalog.Services.Tests.Companies
 				companyB
 			}.AsQueryable());
 
+			UoW.Setup(m => m.Companies.GetByCompanyCode(TestData.CompanyCodeA)).Returns(companyA);
+			UoW.Setup(m => m.Companies.GetByCompanyCode(TestData.CompanyCodeB)).Returns(companyB);
 		}
 
 

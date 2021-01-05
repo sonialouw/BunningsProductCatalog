@@ -4,6 +4,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using System.Linq;
 
 namespace ImportCompanyProducts
 {
@@ -26,13 +27,17 @@ namespace ImportCompanyProducts
 			Logger.LogInformation($"Web job started.");
 
 			var inputFilePath = Config["InputFilePath"];
-		
+
 			var files = Directory.GetFiles(inputFilePath, "catalog*.csv");
 			foreach (var file in files)
 			{
 				var companyCode = file.Replace("catalog", "").Replace(inputFilePath, "").Replace(".csv", "");
 				using FileStream fs = new FileStream(file, FileMode.Open, FileAccess.Read);
-				CompanyProductService.ImportCompanyProductsFromFileStream(new ImportCompanyProductRequest() { FileStream = fs, CompanyCode = companyCode });
+				var result = CompanyProductService.ImportCompanyProductsFromFileStream(new ImportCompanyProductRequest() { FileStream = fs, CompanyCode = companyCode });
+				if (!result.Success)
+				{
+					Logger.LogError($"Import failed {string.Join(",", result.Errors?.Select(i => i.Message))}.");
+				}
 			}
 			Logger.LogInformation($"Web job completed.");
 		}

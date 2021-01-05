@@ -48,7 +48,7 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 				var records = ImportCompanyProductCsvService.GetRecords(request.FileStream, new ImportCompanyProductDtoClassMap());
 				records.ForEach(companyProduct =>
 				{
-					var existingCompanyProduct = GetCompanyProduct(companyProduct.ProductSku, request.CompanyCode);
+					var existingCompanyProduct = UoW.CompanyProducts.GetBySkuAndCompanyCode(companyProduct.ProductSku, request.CompanyCode);
 					if (existingCompanyProduct == null)
 					{
 						var createCompanyProductResult = CreateCompanyProduct(new CreateCompanyProductRequest() { ProductSku = companyProduct.ProductSku, ProductName = companyProduct.ProductName, CompanyCode = request.CompanyCode });
@@ -104,7 +104,7 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 					return result;
 				}
 
-				var company = CompanyService.GetCompany(request.CompanyCode);
+				var company = UoW.Companies.GetByCompanyCode(request.CompanyCode);
 				var newProduct = new CompanyProduct
 				{
 					ProductSku = request.ProductSku.ToUpper().Trim(),
@@ -130,18 +130,11 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 			return result;
 		}
 
-		public CompanyProduct GetCompanyProduct(string productSku, string companyCode)
-		{
-			return UoW.CompanyProducts.GetAll().FirstOrDefault(i => i.Company.CompanyCode.Trim().ToUpper() == companyCode.Trim().ToUpper() 
-			&& i.ProductSku.Trim().ToUpper() == productSku.Trim().ToUpper()
-			&& !i.IsDeleted);
-		}
-
 		private IEnumerable<Error> ValidateDuplicateCompanyProduct(string productSku, string companyCode)
 		{
 			var newErrors = new List<Error>();
 
-			if (!string.IsNullOrEmpty(companyCode) && !string.IsNullOrEmpty(productSku) && GetCompanyProduct(productSku, companyCode) != null)
+			if (!string.IsNullOrEmpty(companyCode) && !string.IsNullOrEmpty(productSku) && UoW.CompanyProducts.GetBySkuAndCompanyCode(productSku, companyCode) != null)
 			{
 				newErrors.Add(new DuplicateProductSkuFoundError(productSku, companyCode));
 			}
@@ -153,7 +146,7 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 		{
 			var newErrors = new List<Error>();
 
-			if (!string.IsNullOrEmpty(companyCode) && !string.IsNullOrEmpty(productSku) && GetCompanyProduct(productSku, companyCode) == null)
+			if (!string.IsNullOrEmpty(companyCode) && !string.IsNullOrEmpty(productSku) && UoW.CompanyProducts.GetBySkuAndCompanyCode(productSku, companyCode) == null)
 			{
 				newErrors.Add(new ProductSkuNotFoundError(productSku, companyCode));
 			}
@@ -176,7 +169,7 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 					return result;
 				}
 
-				var companyProduct = GetCompanyProduct(request.ProductSku, request.CompanyCode);
+				var companyProduct = UoW.CompanyProducts.GetBySkuAndCompanyCode(request.ProductSku, request.CompanyCode);
 				companyProduct.IsDeleted = true;
 				UoW.Save();
 

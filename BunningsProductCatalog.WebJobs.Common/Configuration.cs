@@ -34,6 +34,13 @@ namespace BunningsProductCatalog.WebJobs.Common
 				.AddJsonFile("appsettings.json", true, true)
 				.AddJsonFile($"appsettings.{envName}.json", true, true)
 				.AddJsonFile($"appsettings.{Environment.MachineName}.json", true, true);
+
+			// disable keyvault
+			//if (!context.HostingEnvironment.IsDevelopment())
+			//{
+			//	var builtConfig = config.Build();
+			//	config.AddAzureKeyVault(new Uri(builtConfig["KeyVault:BaseUrl"]), new DefaultAzureCredential());
+			//}
 		}
 
 		public static void ConfigureLogging(HostBuilderContext context, ILoggingBuilder config, string applicationInsightsCategory)
@@ -47,7 +54,7 @@ namespace BunningsProductCatalog.WebJobs.Common
 			config.AddFilter("Microsoft.EntityFrameworkCore.Database.Command", LogLevel.Warning);
 			config.AddFilter("Microsoft.EntityFrameworkCore.Infrastructure", LogLevel.Warning);
 
-			// disable app insights for now
+			// disable app insights
 			//string instrumentationKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
 			//if (!string.IsNullOrEmpty(instrumentationKey))
 			//{
@@ -64,9 +71,7 @@ namespace BunningsProductCatalog.WebJobs.Common
 			//}
 
 			//config.AddFilter<Microsoft.Extensions.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider>(applicationInsightsCategory, LogLevel.Trace);
-
-			}
-
+		}
 
 		public static void ConfigureServices(HostBuilderContext context, IServiceCollection services)
 		{
