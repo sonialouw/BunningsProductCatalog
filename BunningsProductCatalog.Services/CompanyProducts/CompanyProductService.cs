@@ -37,6 +37,7 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 			try
 			{
 
+				// validate
 				result.Errors.AddRange(ValidateCompanyCodeRequired(request.CompanyCode));
 				result.Errors.AddRange(CompanyService.ValidateCompanyExist(request.CompanyCode));
 
@@ -45,12 +46,15 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 					return result;
 				}
 
+				// get records from file
 				var records = ImportCompanyProductCsvService.GetRecords(request.FileStream, new ImportCompanyProductDtoClassMap());
 				records.ForEach(companyProduct =>
 				{
+					// check if product exist
 					var existingCompanyProduct = UoW.CompanyProducts.GetBySkuAndCompanyCode(companyProduct.ProductSku, request.CompanyCode);
 					if (existingCompanyProduct == null)
 					{
+						// create product
 						var createCompanyProductResult = CreateCompanyProduct(new CreateCompanyProductRequest() { ProductSku = companyProduct.ProductSku, ProductName = companyProduct.ProductName, CompanyCode = request.CompanyCode });
 						if (!createCompanyProductResult.Success)
 						{
@@ -59,12 +63,15 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 					}
 				});
 
+				// get all products
 				var companyProducts = UoW.CompanyProducts.GetAll().Where(i => i.Company.CompanyCode == request.CompanyCode).ToList();
 				companyProducts.ForEach(companyProduct =>
 				{
-					var deletedCompanyProduct = !records.Where(i=>i.ProductSku.Trim().ToUpper() == companyProduct.ProductSku.Trim().ToUpper()).Any();
+					// check if product in file
+					var deletedCompanyProduct = !records.Any(i=>i.ProductSku.Trim().ToUpper() == companyProduct.ProductSku.Trim().ToUpper());
 					if (deletedCompanyProduct)
 					{
+						// delete product if no longer in list
 						var deleteCompanyProductResult = DeleteCompanyProduct(new DeleteCompanyProductRequest() { ProductSku = companyProduct.ProductSku, CompanyCode = request.CompanyCode });
 						if (!deleteCompanyProductResult.Success)
 						{
@@ -91,6 +98,7 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 			try
 			{
 
+				// validate
 				result.Errors.AddRange(ValidateProductNameRequired(request.ProductName));
 				result.Errors.AddRange(ValidateProductNameMaxLength(request.ProductName));
 				result.Errors.AddRange(ValidateProductSkuRequired(request.ProductSku));
@@ -105,6 +113,8 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 				}
 
 				var company = UoW.Companies.GetByCompanyCode(request.CompanyCode);
+
+				// create new product
 				var newProduct = new CompanyProduct
 				{
 					ProductSku = request.ProductSku.ToUpper().Trim(),
@@ -118,8 +128,6 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 				UoW.Save();
 
 				result.Success = true;
-
-
 			}
 			catch (Exception e)
 			{
@@ -160,6 +168,7 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 
 			try
 			{
+				// validate
 				result.Errors.AddRange(ValidateProductSkuRequired(request.ProductSku));
 				result.Errors.AddRange(ValidateCompanyCodeRequired(request.CompanyCode));
 				result.Errors.AddRange(ValidateCompanyProductExist(request.ProductSku, request.CompanyCode));
@@ -169,6 +178,7 @@ namespace BunningsProductCatalog.Services.CompanyProducts
 					return result;
 				}
 
+				// mark product as deleted
 				var companyProduct = UoW.CompanyProducts.GetBySkuAndCompanyCode(request.ProductSku, request.CompanyCode);
 				companyProduct.IsDeleted = true;
 				UoW.Save();

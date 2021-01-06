@@ -35,6 +35,7 @@ namespace BunningsProductCatalog.Services.Suppliers
 
 			try
 			{
+				// validate
 				result.Errors.AddRange(ValidateCompanyCodeRequired(request.CompanyCode));
 				result.Errors.AddRange(CompanyService.ValidateCompanyExist(request.CompanyCode));
 
@@ -43,12 +44,15 @@ namespace BunningsProductCatalog.Services.Suppliers
 					return result;
 				}
 
+				// read records from file
 				var records = ImportSupplierCsvService.GetRecords(request.FileStream, new ImportSupplierDtoClassMap());
 				records.ForEach(supplier =>
 				{
+					// check if supplier exists
 					var existingSupplier = UoW.Suppliers.GetBySupplierCodeAndCompanyCode(supplier.SupplierCode, request.CompanyCode);
 					if (existingSupplier == null)
 					{
+						// create if not exist
 						var createSupplierResult = CreateSupplier(new CreateSupplierRequest() { SupplierName = supplier.SupplierName, SupplierCode = supplier.SupplierCode, CompanyCode = request.CompanyCode });
 						if (!createSupplierResult.Success)
 						{
@@ -76,6 +80,7 @@ namespace BunningsProductCatalog.Services.Suppliers
 
 			try
 			{
+				// validate 
 				result.Errors.AddRange(ValidateSupplierNameRequired(request.SupplierName));
 				result.Errors.AddRange(ValidateSupplierNameMaxLength(request.SupplierName));
 				result.Errors.AddRange(ValidateCompanyCodeRequired(request.CompanyCode));
@@ -89,7 +94,10 @@ namespace BunningsProductCatalog.Services.Suppliers
 					return result;
 				}
 
+				// get company
 				var company = UoW.Companies.GetByCompanyCode(request.CompanyCode);
+
+				// create supplier
 				var newSupplier = new Supplier
 				{
 					SupplierCode = request.SupplierCode.ToUpper().Trim(),
@@ -114,7 +122,6 @@ namespace BunningsProductCatalog.Services.Suppliers
 			return result;
 		}
 
-
 		public IEnumerable<Error> ValidateSupplierExist(string supplierCode, string companyCode)
 		{
 			var newErrors = new List<Error>();
@@ -130,7 +137,6 @@ namespace BunningsProductCatalog.Services.Suppliers
 		private IEnumerable<Error> ValidateDuplicateSupplier(string supplierCode, string companyCode)
 		{
 			var newErrors = new List<Error>();
-			var supplier = UoW.Suppliers.GetBySupplierCodeAndCompanyCode(supplierCode, companyCode);
 
 			if (!string.IsNullOrEmpty(companyCode) && !string.IsNullOrEmpty(supplierCode) && UoW.Suppliers.GetBySupplierCodeAndCompanyCode(supplierCode, companyCode) != null)
 			{

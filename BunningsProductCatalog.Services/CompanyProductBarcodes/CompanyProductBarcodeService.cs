@@ -43,6 +43,7 @@ namespace BunningsProductCatalog.Services.CompanyProductBarcodes
 
 			try
 			{
+				// validate
 				result.Errors.AddRange(ValidateCompanyCodeRequired(request.CompanyCode));
 				result.Errors.AddRange(CompanyService.ValidateCompanyExist(request.CompanyCode));
 				if (result.Errors.Any())
@@ -50,12 +51,15 @@ namespace BunningsProductCatalog.Services.CompanyProductBarcodes
 					return result;
 				}
 
+				// get all records
 				var records = ImportCompanyProductBarcodeCsvService.GetRecords(request.FileStream, new ImportCompanyProductBarcodeDtoClassMap());
 				records.ForEach(barcode =>
 				{
+					// check if barcode exist
 					var existingCompanyProductBarcode = GetCompanyProductBarcode(barcode.Barcode, barcode.SupplierCode, barcode.ProductSku, request.CompanyCode);
 					if (existingCompanyProductBarcode == null)
 					{
+						// create product
 						var createCompanyProductBarcodeResult = CreateCompanyProductBarcode(new CreateCompanyProductBarcodeRequest() { Barcode = barcode.Barcode, ProductSku = barcode.ProductSku, SupplierCode = barcode.SupplierCode, CompanyCode = request.CompanyCode });
 						if (!createCompanyProductBarcodeResult.Success)
 						{
@@ -81,15 +85,13 @@ namespace BunningsProductCatalog.Services.CompanyProductBarcodes
 
 			try
 			{
+				// validate
 				result.Errors.AddRange(ValidateProductSkuRequired(request.ProductSku));
 				result.Errors.AddRange(CompanyProductService.ValidateCompanyProductExist(request.ProductSku, request.CompanyCode));
-
 				result.Errors.AddRange(ValidateSupplierCodeRequired(request.SupplierCode));
 				result.Errors.AddRange(SupplierService.ValidateSupplierExist(request.SupplierCode, request.CompanyCode));
-
 				result.Errors.AddRange(ValidateCompanyCodeRequired(request.CompanyCode));
 				result.Errors.AddRange(CompanyService.ValidateCompanyExist(request.CompanyCode));
-
 				result.Errors.AddRange(ValidateDuplicateCompanyProductBarcode(request.Barcode, request.SupplierCode, request.ProductSku, request.CompanyCode));
 
 				if (result.Errors.Any())
@@ -100,6 +102,7 @@ namespace BunningsProductCatalog.Services.CompanyProductBarcodes
 				var supplier = UoW.Suppliers.GetBySupplierCodeAndCompanyCode(request.SupplierCode, request.CompanyCode);
 				var companyProduct = UoW.CompanyProducts.GetBySkuAndCompanyCode(request.ProductSku, request.CompanyCode);
 
+				// create product
 				var newCompanyProductBarcode = new CompanyProductBarcode
 				{
 					SupplierId = supplier.SupplierId,

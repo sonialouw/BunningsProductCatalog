@@ -5,7 +5,6 @@ using System.Linq;
 using CsvHelper;
 using CsvHelper.Configuration;
 
-
 namespace BunningsProductCatalog.Services.Csv
 {
 	public class CsvService<T> : ICsvService<T> where T : class
@@ -17,21 +16,19 @@ namespace BunningsProductCatalog.Services.Csv
 				HasHeaderRecord = true,
 				TrimOptions = TrimOptions.Trim
 			};
+
 			if (classMap != null)
 			{
 				config.RegisterClassMap(classMap);
 			}
-			using (var csvStream = new MemoryStream())
-			{
-				fileStream.CopyTo(csvStream);
-				csvStream.Position = 0;
 
-				using (var reader = new CsvReader(new StreamReader(csvStream), config))
-				{
-					var records = reader.GetRecords<T>().ToList();
-					return records;
-				}
-			}
+			using var csvStream = new MemoryStream();
+			fileStream.CopyTo(csvStream);
+			csvStream.Position = 0;
+
+			using var reader = new CsvReader(new StreamReader(csvStream), config);
+			var records = reader.GetRecords<T>().ToList();
+			return records;
 		}
 
 		public string WriteRecords(List<T> records, bool hasHeader, ClassMap<T> classMap, string delimiter, bool shouldQuote)
