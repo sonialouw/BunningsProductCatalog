@@ -1,0 +1,231 @@
+﻿@charset "utf-8";
+
+$roboto-font-path: "~mdbootstrap-pro/font/roboto/";
+$image-path: "~mdbootstrap-pro/img/";
+$fa-font-path: "~@fortawesome/fontawesome-pro/webfonts/";
+@import "custom";
+@import "~bootstrap/scss/bootstrap";
+@import "~mdbootstrap-pro/scss/mdb";
+@import "~@progress/kendo-theme-material/scss/all";
+@import "~@fortawesome/fontawesome-pro/scss/fontawesome";
+@import "~@fortawesome/fontawesome-pro/scss/solid";
+@import "~@fortawesome/fontawesome-pro/scss/brands";
+@import "~@fortawesome/fontawesome-pro/scss/duotone";
+
+// Your custom styles
+
+body {
+	//font-size: 0.9rem;
+}
+
+.sidebar-fixed {
+	height: 100vh;
+	width: 270px;
+	-webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	z-index: 1050;
+	background-color: #fff;
+	padding: 1.5rem;
+	padding-top: 0;
+}
+
+.sidebar-fixed .list-group .active {
+	-webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.sidebar-fixed .logo-wrapper {
+	padding: 2.5rem;
+}
+
+.sidebar-fixed .logo-wrapper img {
+	max-height: 50px;
+}
+
+@media (min-width: 1200px) {
+	.navbar,
+	.page-footer,
+	main {
+		padding-left: 270px;
+	}
+}
+
+@media (max-width: 1199.98px) {
+	.sidebar-fixed {
+		display: none;
+	}
+}
+
+.froala-editor-container {
+	min-height: 450px;
+	margin-top: 10px;
+}
+
+.froala-editor-subject {
+	border-color: #d9e3ea;
+	border-radius: 0;
+	font-size: 14px;
+	margin-bottom: 30px;
+}
+
+.validation-summary-errors {
+
+	ul {
+		padding: 0px;
+	}
+
+	li {
+		list-style: none;
+		font-size: 80%;
+		color: $danger;
+	}
+}
+
+
+
+	h1 {
+		padding-bottom: 0.2em;
+	}
+
+	#side-menu svg {
+		margin-right: 13px;
+		width: 25px !important;
+	}
+
+	.btn svg {
+		margin-left: 5px;
+	}
+
+	.btn {
+		box-shadow: none;
+		margin-left: 0px;
+		margin-right: 0px;
+	}
+
+	.k-grid {
+		margin-top: 10px;
+	}
+
+	.k-grid p {
+		margin: 0;
+	}
+	.documentation .docs-pills {
+		margin-top: 1.4rem;
+	}
+
+	.docs-pills {
+		padding: 0;
+		margin: 1.5rem 0;
+		border: 1px solid #e0e0e0;
+		-webkit-border-radius: 2px;
+		border-radius: 2px;
+	}
+
+	.card-artwork {
+		width: 348px;
+	}
+
+	.field-validation-error {
+		width: 100%;
+		margin-top: .25rem;
+		font-size: 80%;
+		color: #dc3545;
+	}
+
+	.k-colorpicker {
+		vertical-align: top;
+		/*margin: 20px 0;*/
+	}
+
+	.k-colorpicker .k-picker-wrap {
+		border-width: 1px;
+	}
+
+	.margin-bottom-0 {
+		margin-bottom: 0px;
+	}
+
+	.margin-top-0 {
+		margin-top: 0px;
+	}
+
+
+	.double-nav .breadcrumb-dn {
+		color: #fff;
+	}
+
+	p.required {
+		margin-top: 10px;
+		font-size: 12px;
+	}
+
+	.step.done {
+		&:before {
+			font-family: "Font Awesome 5 Pro" !important;
+		}
+	}
+
+	.step.wrong {
+		&:before {
+			font-family: "Font Awesome 5 Pro" !important;
+		}
+	}
+
+	.select-wrapper input.select-dropdown {
+		color: rgb(117,117,117) !important;
+		font-weight: 300 !important;
+	}
+
+	ul.stepper .md-form label {
+		left: 0.3375rem !important;
+	}
+
+.k-grid td, .k-grid th {
+	font-size: 0.8rem;
+}
+
+.select-wrapper + label.active {
+	left: 5px;
+
+}
+
+//fix for mdboostratp date picker missing button images
+.picker__box .picker__header .picker__nav--prev::before, .picker__box .picker__header .picker__nav--next::before {
+	font-family: "Font Awesome 5 Pro";
+}
+
+#bee-plugin-container {
+	height: 500px;
+	margin-bottom: 20px;
+}
+
+@media (min-width: 1200px) {
+	.modal-xxl {
+		max-width: 1250px!important;
+	}
+}
+
+.invalid-label
+{
+	display:block;
+}
+
+
+.margin-right-20 {
+	margin-right: 20px;
+}
+
+.margin-right-5 {
+	margin-right: 10px;
+}
+
+.margin-right-5 {
+	margin-right: 5px;
+}
+
+.modal-footer .btn
+{
+	margin-right:10px;
+}

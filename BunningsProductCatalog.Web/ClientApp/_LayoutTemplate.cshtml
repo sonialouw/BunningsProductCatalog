@@ -1,0 +1,132 @@
+﻿@using System.Reflection
+@using Kendo.Mvc.UI
+@{
+	var version = Assembly.GetEntryAssembly()?.GetName().Version.ToString();
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>@ViewData["Title"] - Bunnings Product Catalog</title>
+
+	<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+	<link href="<%= htmlWebpackPlugin.files.chunks[chunk].css %>" rel="stylesheet"/>
+	<% } %>
+
+</head>
+<body class="fixed-sn indigo-skin" data-controller="@ViewContext.RouteData.Values["Controller"]" data-action="@ViewContext.RouteData.Values["Action"]">
+
+<!--Double navigation-->
+<header>
+	<!-- Sidebar navigation -->
+	<div id="slide-out" class="side-nav fixed">
+		<ul class="custom-scrollbar">
+			<!-- Logo -->
+			<li class="logo-sn d-block waves-effect">
+				<div class="text-center p-3">
+					<strong>Bunnings Product Catalog</strong>
+				</div>
+			</li>
+			<!--/. Logo -->
+			<!-- Side navigation links -->
+			<li>
+				<ul id="side-menu" class="collapsible collapsible-accordion">
+					
+				</ul>
+			</li>
+			<!--/. Side navigation links -->
+		</ul>
+		<div class="sidenav-bg mask-strong"></div>
+	</div>
+	<!--/. Sidebar navigation -->
+	<!-- Navbar -->
+	<nav class="navbar fixed-top navbar-toggleable-md navbar-expand-lg scrolling-navbar double-nav">
+		<!-- SideNav slide-out button -->
+		<div class="float-left">
+			<a href="#" data-activates="slide-out" class="button-collapse">
+				<em class="fas fa-bars"></em>
+			</a>
+		</div>
+		<!-- Breadcrumb-->
+		<div class="breadcrumb-dn mr-auto">
+			@*<p>Material Design for Bootstrap</p>*@
+		</div>
+		<ul class="nav navbar-nav nav-flex-icons ml-auto">
+			@if (!string.IsNullOrEmpty(version))
+			{
+				<li class="navbar-text" style="font-size: 15px">
+					<span class="clearfix d-none d-sm-inline-block">
+						<em class="fa fas fa-code-merge ml2"></em> Version @version
+					</span>
+				</li>
+			}
+			<li class="nav-item">
+			
+			</li>
+		</ul>
+
+	</nav>
+	<!-- /.Navbar -->
+</header>
+<!--/.Double navigation-->
+<!--Main layout-->
+<main class="">
+	<div class="container-fluid mt-2 mb-5 pl-0 pr-0">
+
+
+
+		@RenderBody()
+	</div>
+</main>
+
+<environment include="Development">
+	<script src="~/lib/jquery/dist/jquery.js"></script>
+
+</environment>
+<environment exclude="Development">
+	<script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.4.1.min.js"
+	        asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+	        asp-fallback-test="window.jQuery"
+	        crossorigin="anonymous"
+	        integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh">
+	</script>
+</environment>
+
+<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+<script src="<%= htmlWebpackPlugin.files.chunks[chunk].entry %>"></script>
+<% } %>
+
+<environment include="Development">
+	<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+	<script src="~/lib/jquery-validation/dist/additional-methods.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+	<script src="~/lib/ajax-validation/ajaxvalidation.js"></script>
+	<script src="~/lib/jquery-unobtrusive-ajax/jquery.unobtrusive-ajax.js"></script>
+	<script src="~/lib/jquery-validation-custom/required-if-bool.js"></script>
+	@*<script src="~/lib/jquery-validation-custom/required-if-discounttypeisnot.js"></script>*@
+</environment>
+
+<environment exclude="Development">
+	<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+	<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+	<script src="~/lib/ajax-validation/ajaxvalidation.js"></script>
+	<script src="~/lib/jquery-unobtrusive-ajax/jquery.unobtrusive-ajax.min.js"></script>
+	<script src="~/lib/jquery-validation-custom/required-if-bool.js"></script>
+	@*<script src="~/lib/jquery-validation-custom/required-if-discounttypeisnot.js"></script>*@
+</environment>
+
+<script src="~/lib/kendo-ui/js/kendo.all.min.js"></script>
+<script src="~/lib/kendo-ui/js/kendo.aspnetmvc.min.js"></script>
+<script src="~/lib/kendo-ui/js/cultures/kendo.culture.en-AU.min.js"></script>
+<script src="~/lib/kendo-ui/js/messages/kendo.messages.en-AU.min.js"></script>
+
+
+<script>
+	kendo.culture("en-AU");
+</script>
+@Html.Kendo().DeferredScripts()
+@RenderSection("Scripts", required: false)
+</body>
+</html>
